@@ -1,0 +1,135 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>fMinesweeper</title>
+
+    <link href="content/bootstrap.css" rel="stylesheet" />
+    <link href="content/bootstrap-theme.css" rel="stylesheet" />
+    <link href="content/bootstrap.flatly.css" rel="stylesheet" />
+    <link href="content/site.css" rel="stylesheet" />
+    <link href="content/fMinesweeper.css" rel="stylesheet" />
+
+    <script src="scripts/third_party/misc/modernizr-2.6.2.js"></script>
+</head>
+<body>
+    <div id="minesweeper-page">
+        <div id="mnsw-ui" class="panel panel-default">
+            <div class="form-group">
+                <button id="mnsw-ui-restart-btn" type="button" class="btn btn-primary">Restart</button>
+                <button id="mnsw-ui-new-game-btn" type="button" class="btn btn-primary">New Game</button>
+            </div>
+            <div class="form-group flex-row">
+                <label class="control-label">Lives Left&nbsp;<input type="number" class="form-control" style="display: inline;" disabled data-bind="value: statistics.lives" /></label>
+                <div style="margin: -3px 0px 0px 8px;" class="form-inline">
+                    <label class="control-label">Mines Found</label>
+                    <div class="flex-row" style="display: inline;">
+                        <input type="number" class="form-control" disabled data-bind="value: statistics.foundMines" />
+                        <label class="control-label">&nbsp;/&nbsp;</label>
+                        <input type="number" class="form-control" disabled data-bind="value: settings.totalMines" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="mnsw-board">
+        </div>
+        <div id="mnsw-overlay" data-bind="visible: !statistics.gameStarted()">
+            <div id="mnsw-overlay-modal" class="panel panel-default">
+                <div class="panel-heading">Settings</div>
+                <div class="panel-body">
+                    <div>
+                        <div class="container-fluid">
+                            <div class="row form-group">
+                                <div class="col-sm-4"><label for="mnsw-settings-rows">Rows</label></div>
+                                <div class="col-sm-8"><input id="mnsw-settings-rows" type="number" class="form-control" data-bind="textinput: settings.rows" /></div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-sm-4"><label for="mnsw-settings-columns">Columns</label></div>
+                                <div class="col-sm-8"><input id="mnsw-settings-columns" type="number" class="form-control" data-bind="textinput: settings.columns" /></div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-sm-4"><label for="mnsw-settings-total-lives">Lives</label></div>
+                                <div class="col-sm-8"><input id="mnsw-settings-total-lives" type="number" class="form-control" data-bind="textinput: settings.totalLives" /></div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-sm-12">
+                                    <button id="msnw-overlay-new-game-btn" type="button" class="btn btn-primary btn-block">Start</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts/third_party/jquery/jquery-1.10.2.js"></script>
+
+    <script src="scripts/third_party/bootstrap/bootstrap.js"></script>
+    <script src="scripts/third_party/bootstrap/respond.js"></script>
+
+    <script src="scripts/third_party/knockout/knockout-3.4.0.debug.js"></script>
+
+    <script src="scripts/third_party/misc/lodash.js"></script>
+    <script src="scripts/third_party/misc/moment.js"></script>
+
+
+    <script src="scripts/fMinesweeper/Board.js"></script>
+    <script src="scripts/fMinesweeper/Cell.js"></script>
+    <script src="scripts/fMinesweeper/Settings.js"></script>
+    <script src="scripts/fMinesweeper/Statistics.js"></script>
+
+    <script type="text/javascript">
+        var fMinesweeper = fMinesweeper || {};
+
+        fMinesweeper.Page = (function () {
+            'use strict';
+
+            var Page = {};
+
+            Page.$context = null;
+            Page.board = null;
+            Page.vm = null;
+
+            Page.initialize = function () {
+                Page.$context = $('#minesweeper-page');
+
+                Page.board = new fMinesweeper.Board(Page.$context.find('#mnsw-board'), new fMinesweeper.Settings());
+                Page.board.build();
+                Page.initUI();
+            };
+
+            Page.initUI = function () {
+                Page.vm = {
+                    settings: Page.board.settings.vm,
+                    statistics: Page.board.statistics.vm
+                };
+                ko.applyBindings(Page.vm, Page.$context.get(0));
+
+                Page.$context.find('#mnsw-ui-restart-btn').on('click', function () {
+                    if (!Page.board.gameStarted || confirm('Your current progress will be lost. Are you sure you want to start a new game?')) {
+                        Page.board.startNewGame(false);
+                    }
+                });
+                Page.$context.find('#mnsw-ui-new-game-btn').on('click', function () {
+                    if (!Page.board.gameStarted || confirm('Your current progress will be lost. Are you sure you want to start a new game?')) {
+                        Page.board.gameStarted = false;
+                    }
+                });
+                Page.$context.find('#msnw-overlay-new-game-btn').on('click', function () {
+                    Page.board.build();
+                    Page.board.startNewGame(true);
+                });
+            };
+
+            return Page;
+        })();
+
+        $(document).on('ready', function () {
+            fMinesweeper.Page.initialize();
+        });
+    </script>
+</body>
+</html>
