@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>fMinesweeper</title>
+
+    <link href="content/bootstrap.css" rel="stylesheet" />
+    <link href="content/bootstrap-theme.css" rel="stylesheet" />
+    <link href="content/bootstrap.flatly.css" rel="stylesheet" />
+    <link href="content/Site.css" rel="stylesheet" />
+    <link href="content/fMinesweeper.css" rel="stylesheet" />
+
+    <script src="vendor/misc/modernizr-2.6.2.js"></script>
+</head>
+<body>
+    <div id="minesweeper-page">
+        <div id="mnsw-ui" class="panel panel-default">
+            <div class="form-group">
+                <button id="mnsw-ui-restart-btn" type="button" class="btn btn-primary">Restart</button>
+                <button id="mnsw-ui-new-game-btn" type="button" class="btn btn-primary">New Game</button>
+            </div>
+            <div class="form-group flex-row">
+                <label class="control-label">Lives Left&nbsp;<input type="number" class="form-control" style="display: inline;" disabled data-bind="value: statistics.lives" /></label>
+                <div style="margin: -3px 0px 0px 8px;" class="form-inline">
+                    <label class="control-label">Mines Found</label>
+                    <div class="flex-row" style="display: inline;">
+                        <input type="number" class="form-control" disabled data-bind="value: statistics.foundMines" />
+                        <label class="control-label">&nbsp;/&nbsp;</label>
+                        <input type="number" class="form-control" disabled data-bind="value: settings.totalMines" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="mnsw-board">
+        </div>
+        <div id="mnsw-overlay" data-bind="visible: !statistics.gameStarted()">
+            <div id="mnsw-overlay-modal" class="panel panel-default">
+                <div class="panel-heading">Settings</div>
+                <div class="panel-body">
+                    <div>
+                        <div class="container-fluid">
+                            <div class="row form-group">
+                                <div class="col-sm-4"><label for="mnsw-settings-rows">Rows</label></div>
+                                <div class="col-sm-8"><input id="mnsw-settings-rows" type="number" class="form-control" data-bind="textinput: settings.rows" /></div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-sm-4"><label for="mnsw-settings-columns">Columns</label></div>
+                                <div class="col-sm-8"><input id="mnsw-settings-columns" type="number" class="form-control" data-bind="textinput: settings.columns" /></div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-sm-4"><label for="mnsw-settings-total-lives">Lives</label></div>
+                                <div class="col-sm-8"><input id="mnsw-settings-total-lives" type="number" class="form-control" data-bind="textinput: settings.totalLives" /></div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-sm-12">
+                                    <button id="msnw-overlay-new-game-btn" type="button" class="btn btn-primary btn-block">Start</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="vendor/jquery/jquery-1.10.2.js"></script>
+    <script src="vendor/bootstrap/bootstrap.js"></script>
+    <script src="vendor/bootstrap/respond.js"></script>
+    <script src="vendor/knockout/knockout-3.4.0.debug.js"></script>
+    <script src="vendor/misc/lodash.js"></script>
+    <script src="vendor/misc/moment.js"></script>
+
+    <script type="module" src="/src/main.js"></script>
+</body>
+</html>
