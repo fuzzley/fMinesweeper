@@ -1,7 +1,7 @@
 Just a simple Minesweeper clone, written in TypeScript and Angular.
 The project utilizes [Phaser](https://phaser.io/) for the game rendering/canvas and [Angular](https://angular.dev/) for the user interface.
 
-The [latest version of the game](http://fuzzley.info/project/minesweeper/) is hosted on http://fuzzley.info/project/minesweeper/.
+The [latest version of the game](https://fuzzley.info/projects/minesweeper/play/) is hosted on https://fuzzley.info/projects/minesweeper/play/.
 
 Have fun!
 
