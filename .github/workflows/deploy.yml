@@ -1,9 +1,9 @@
-name: Build and publish to fuzzley.info
+name: Build and publish to fuzzley.games
 
 # Every push to main builds the game and publishes it to this repository's
-# site-build release. fuzzley/fuzzley fetches it from there: a scheduled
+# site-build release. fuzzley/fuzzley-games fetches it from there: a scheduled
 # workflow in that repository moves its pin to the newest build within about
-# 15 minutes, and fuzzley.info redeploys.
+# 15 minutes, and fuzzley.games redeploys.
 
 on:
   push:
@@ -36,10 +36,10 @@ jobs:
       - name: Build production assets
         run: yarn build
 
-      # fuzzley.info fetches the game from here. The site-build release keeps
+      # fuzzley.games fetches the game from here. The site-build release keeps
       # recent builds, each named after its commit; latest.json names the
-      # newest, and fuzzley/fuzzley pins one in frontend/games.json, which a
-      # scheduled workflow there moves to the newest every 15 minutes.
+      # newest, and fuzzley/fuzzley-games pins one in frontend/games.json,
+      # which a scheduled workflow there moves to the newest every 15 minutes.
       - name: Publish the build to the site-build release
         env:
           GH_TOKEN: ${{ github.token }}
@@ -63,22 +63,22 @@ jobs:
           git push -f origin "refs/tags/$TAG"
           if ! gh release view "$TAG" > /dev/null 2>&1; then
             gh release create "$TAG" --latest=false --title "Site build" \
-              --notes "Production builds of the game for fuzzley.info, uploaded by the deploy workflow. Each archive is named after the commit it was built from, and latest.json names the newest. fuzzley/fuzzley pins one in frontend/games.json. The ten newest archives and the pinned one are kept."
+              --notes "Production builds of the game for fuzzley.games, uploaded by the deploy workflow. Each archive is named after the commit it was built from, and latest.json names the newest. fuzzley/fuzzley-games pins one in frontend/games.json. The ten newest archives and the pinned one are kept."
           fi
 
           # The archive goes up first, so latest.json never names a missing file.
           gh release upload "$TAG" "$asset" --clobber
           gh release upload "$TAG" latest.json --clobber
 
-          # Keep the newest archives and the one fuzzley.info pins. If the pin
+          # Keep the newest archives and the one fuzzley.games pins. If the pin
           # can't be read, keep everything rather than risk deleting it.
           status=$(curl -sS -o pinned.json -w '%{http_code}' \
-            https://raw.githubusercontent.com/fuzzley/fuzzley/main/frontend/games.json || echo 000)
+            https://raw.githubusercontent.com/fuzzley/fuzzley-games/main/frontend/games.json || echo 000)
           case "$status" in
             200) pinned=$(jq -r --arg slug "$SLUG" '.[$slug].asset // empty' pinned.json) ;;
             404) pinned="" ;;
             *)
-              echo "::warning::Couldn't read fuzzley's games.json (HTTP $status), so no archives were deleted."
+              echo "::warning::Couldn't read fuzzley-games' games.json (HTTP $status), so no archives were deleted."
               exit 0
               ;;
           esac
