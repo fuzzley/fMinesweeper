@@ -19,3 +19,7 @@ yarn test        # run tests with Vitest
 yarn lint        # run ESLint
 yarn prettier    # format the code with Prettier
 ```
+
+## License
+
+This project source code is licensed under the [GNU General Public License v3.0 or later](LICENSE).
