@@ -1,3 +1,6 @@
+> [!NOTE]
+> This code was branched off into [fuzzley-games](https://github.com/fuzzley/fuzzley-games) in October 2026, and the newest version lives there, in [`frontend/games/minesweeper/`](https://github.com/fuzzley/fuzzley-games/tree/main/frontend/games/minesweeper). This repository keeps the code as it was when it branched; the two may diverge.
+
 Just a simple Minesweeper clone, written in TypeScript and Angular.
 The project utilizes [Phaser](https://phaser.io/) for the game rendering/canvas and [Angular](https://angular.dev/) for the user interface.
 
